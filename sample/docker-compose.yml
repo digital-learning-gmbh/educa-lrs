@@ -15,7 +15,7 @@ services:
       - './db:/var/lib/mysql'
 
   educa:
-      image: registry.digitallearning.gmbh/educa/educa-frame/main:latest
+      image: registry.digitallearning.gmbh/educa/educa-lrs/main:latest
       restart: unless-stopped
       ports:
         - 80:80
@@ -24,7 +24,6 @@ services:
       volumes:
         - ./storage/logs:/usr/share/nginx/html/storage/logs
         - ./storage/app:/usr/share/nginx/html/storage/app
-        - ./frame.php:/usr/share/nginx/html/config/educa-frame.php
         - ./.env_educa:/usr/share/nginx/html/.env
       depends_on:
         - db
