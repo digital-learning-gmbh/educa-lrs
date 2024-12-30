@@ -1,0 +1,32 @@
+version: '3'
+services:
+
+  db:
+    image: mariadb:10.6
+    command: [ '--innodb_strict_mode=0' ]
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+      - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MARIADB_USER=${DATABASE_USER}
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+      - MARIADB_DATABASE=${DATABASE_USER}
+    volumes:
+      - './db:/var/lib/mysql'
+
+  educa:
+      image: registry.digitallearning.gmbh/educa/educa-frame/main:latest
+      restart: unless-stopped
+      ports:
+        - 80:80
+      environment:
+        - TZ=Europe/Berlin
+      volumes:
+        - ./storage/logs:/usr/share/nginx/html/storage/logs
+        - ./storage/app:/usr/share/nginx/html/storage/app
+        - ./frame.php:/usr/share/nginx/html/config/educa-frame.php
+        - ./.env_educa:/usr/share/nginx/html/.env
+      depends_on:
+        - db
+
+

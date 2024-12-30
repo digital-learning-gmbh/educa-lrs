@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+  db:
+    image: mariadb:10.6
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${WEBSITE}
+    networks:
+      - internal
+    volumes:
+      - ./db:/var/lib/mysql
+    labels:
+      - traefik.enable=false
+
+  nginx:
+    image: nginx:stable
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:9999:80
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WEBSITE}.rule=Host(`${URL}`)
+      - traefik.http.routers.${WEBSITE}.tls=true
+      - traefik.http.routers.${WEBSITE}.tls.certresolver=lets-encrypt
+        #- traefik.http.routers.${WEBSITE}.middlewares=security-headers@file
+        #- traefik.http.services.${WEBSITE}.loadbalancer.server.port=80" 
+    networks:
+      - internal
+    volumes:
+      - ./..:/usr/share/nginx/html
+      - ./nginx/site-dev.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
+  app:
+    build: ./app
+    expose:
+      - 9000
+    volumes:
+       - ./..:/usr/share/nginx/html
+       - ./..:/var/www
+       - ./yarn-cache:/var/www/.yarn
+         #- ./npm:/usr/share/nginx/html/stupla/node_modules
+       - ./app/php.ini:/usr/local/etc/php/php.ini
+        #- ./log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
+    user: "1000:1000"
+    networks:
+      - internal
+
+networks:
+  internal:
+    external: false
