@@ -37,4 +37,37 @@ class Statement extends Model
     {
         return $this->belongsTo(LearningObject::class, 'object_id');
     }
+
+    public function toXapiFormat()
+    {
+        return [
+            'id' => $this->id,
+            'actor' => [
+                'objectType' => $this->actor->objectType ?? 'Agent',
+                'name' => $this->actor->name ?? null,
+                'mbox' => $this->actor->mbox ?? null,
+            ],
+            'verb' => [
+                'id' => $this->verb->iri ?? null,
+                'display' => [
+                    'en-US' => $this->verb->name ?? null,
+                ],
+            ],
+            'object' => [
+                'objectType' => $this->object->type ?? 'Activity',
+                'id' => $this->object->iri ?? null,
+                'definition' => [
+                    'name' => [
+                        'en-US' => $this->object->name ?? null,
+                    ],
+                    'description' => [
+                        'en-US' => $this->object->description ?? null,
+                    ],
+                ],
+            ],
+            'result' => $this->result,
+            'context' => $this->context,
+            'timestamp' => $this->timestamp ?? now()->toIso8601String(),
+        ];
+    }
 }

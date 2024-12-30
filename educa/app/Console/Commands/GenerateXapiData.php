@@ -30,8 +30,8 @@ class GenerateXapiData extends Command
     public function handle()
     {
         $count = (int) $this->option('count');
-        $authToken = 'educa-test'; // Replace with your actual token
-        $server = "http://localhost";
+        $authToken = 'test-token-educa'; // Replace with your actual token
+        $server = "http://localhost:8000";
 
         $this->output->progressStart($count);
 
@@ -39,11 +39,12 @@ class GenerateXapiData extends Command
             $statement = $this->generateXapiStatement();
 
             // Post to the server with authentication
-            $response = Http::withToken($authToken)->post($server.'/statements', $statement);
+            $response = Http::withToken($authToken)->post($server.'/api/statements', $statement);
 
             if ($response->successful()) {
-                $this->info("Successfully posted xAPI statement: " . json_encode($statement, JSON_PRETTY_PRINT));
+               // $this->info("Successfully posted xAPI statement: " . json_encode($statement, JSON_PRETTY_PRINT));
             } else {
+                $this->info("Response code: ".$response->body()."\n");
                 $this->error("Failed to post xAPI statement: " . json_encode($statement, JSON_PRETTY_PRINT));
             }
 

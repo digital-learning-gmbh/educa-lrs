@@ -25,21 +25,26 @@ class StatementController extends Controller
 
         // Create or retrieve actor
         $actor = Actor::firstOrCreate([
-            'mbox' => $validated['actor']['mbox'] ?? null,
+            'mbox' => $validated['actor']['mbox'],
+        ], [
             'name' => $validated['actor']['name'] ?? null,
+            'objectType' => $validated['actor']['objectType'] ?? 'Agent',
         ]);
 
         // Create or retrieve verb
         $verb = Verb::firstOrCreate([
-            'name' => $validated['verb']['name'],
-            'iri' => $validated['verb']['iri'],
+            'iri' => $validated['verb']['id'],
+        ], [
+            'name' => $validated['verb']['display']['en-US'] ?? null,
         ]);
 
         // Create or retrieve object
         $object = LearningObject::firstOrCreate([
-            'name' => $validated['object']['name'],
-            'type' => $validated['object']['type'],
-            'iri' => $validated['object']['iri'],
+            'iri' => $validated['object']['id'],
+        ], [
+            'name' => $validated['object']['definition']['name']['en-US'] ?? null,
+            'type' => $validated['object']['objectType'] ?? 'Activity',
+            'description' => $validated['object']['definition']['description']['en-US'] ?? null,
         ]);
 
         // Create statement
@@ -52,7 +57,7 @@ class StatementController extends Controller
             'timestamp' => $timestamp,
         ]);
 
-        return response()->json($statement->load('actor', 'verb', 'object'), 201);
+        return response()->json($statement->toXapiFormat(), 201);
     }
 
     public function index()
@@ -89,6 +94,8 @@ class StatementController extends Controller
             ]);
         }
 
-        return response()->json($query->get());
+        $statements = $query->get()->map->toXapiFormat();
+
+        return response()->json($statements);
     }
 }

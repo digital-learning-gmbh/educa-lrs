@@ -17,17 +17,28 @@ class CheckAuthToken
      */
     public function handle(Request $request, Closure $next)
     {
-        $token = $request->header('Authorization');
+        // Get the Authorization header
+        $authorizationHeader = $request->header('Authorization');
 
-        if (!$token) {
+        // Check if the header exists
+        if (!$authorizationHeader) {
             return response()->json(['error' => 'Authorization token missing'], 401);
         }
 
-        // Check if token exists in the database
-        if (!AuthToken::where('token', $token)->exists()) {
-            return response()->json(['error' => 'Invalid or expired token'], 401);
+        // Support both plain tokens and 'Bearer <token>' formats
+        if (str_starts_with($authorizationHeader, 'Bearer ')) {
+            $token = substr($authorizationHeader, 7); // Extract token after 'Bearer '
+        } else {
+            $token = $authorizationHeader; // Use as-is if no 'Bearer ' prefix
         }
 
+        // Check if token exists in the database
+        $authToken = AuthToken::where('token', $token)->first();
+
+        if (!$authToken) {
+            return response()->json(['error' => 'Invalid or expired token'], 401);
+        }
+        // Proceed to the next middleware or request handler
         return $next($request);
     }
 }
