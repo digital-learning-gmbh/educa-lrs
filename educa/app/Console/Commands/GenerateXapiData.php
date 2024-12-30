@@ -13,7 +13,7 @@ class GenerateXapiData extends Command
      *
      * @var string
      */
-    protected $signature = 'xapi:generate {--count=1 : Number of xAPI statements to generate}';
+    protected $signature = 'xapi:generate {--count=1 : Number of xAPI statements to generate} {--bulk_size=100 : Number of xAPI statements for one batch}';
 
     /**
      * The console command description.
@@ -30,22 +30,29 @@ class GenerateXapiData extends Command
     public function handle()
     {
         $count = (int) $this->option('count');
+        $batchSize= (int) $this->option('bulk_size');
         $authToken = 'test-token-educa'; // Replace with your actual token
         $server = "http://localhost:8000";
+        $statements = [];
 
         $this->output->progressStart($count);
 
         for ($i = 0; $i < $count; $i++) {
-            $statement = $this->generateXapiStatement();
+            $statements[] = $this->generateXapiStatement();
 
-            // Post to the server with authentication
-            $response = Http::withToken($authToken)->post($server.'/api/statements', $statement);
+            // If the batch size is reached or the last statement, send the batch
+            if (count($statements) === $batchSize || $i === $count - 1) {
+                $response = Http::withToken($authToken)->post($server . '/api/statements/bulk', [
+                    'statements' => $statements,
+                ]);
 
-            if ($response->successful()) {
-               // $this->info("Successfully posted xAPI statement: " . json_encode($statement, JSON_PRETTY_PRINT));
-            } else {
-                $this->info("Response code: ".$response->body()."\n");
-                $this->error("Failed to post xAPI statement: " . json_encode($statement, JSON_PRETTY_PRINT));
+                if ($response->successful()) {
+                    $this->info("Successfully posted batch of " . count($statements) . " statements.");
+                } else {
+                    $this->error("Failed to post batch. Response: " . $response->body());
+                }
+
+                $statements = []; // Clear the batch after sending
             }
 
             $this->output->progressAdvance();

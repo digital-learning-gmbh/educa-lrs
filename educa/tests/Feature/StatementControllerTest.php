@@ -126,6 +126,72 @@ class StatementControllerTest extends TestCase
         $this->assertDatabaseHas('statements', []);
     }
 
+    public function it_can_bulk_store_statements()
+    {
+        $statements = [];
+
+        for ($i = 0; $i < 5; $i++) {
+            $statements[] = [
+                'actor' => [
+                    'objectType' => 'Agent',
+                    'name' => 'Test Actor ' . $i,
+                    'mbox' => 'mailto:test' . $i . '@example.com',
+                ],
+                'verb' => [
+                    'id' => 'http://adlnet.gov/expapi/verbs/completed',
+                    'display' => [
+                        'en-US' => 'completed'
+                    ]
+                ],
+                'object' => [
+                    'objectType' => 'Activity',
+                    'id' => 'http://example.com/activities/module-' . $i,
+                    'definition' => [
+                        'name' => [
+                            'en-US' => 'Module ' . $i
+                        ],
+                        'description' => [
+                            'en-US' => 'A test module description for module ' . $i
+                        ]
+                    ]
+                ],
+                'result' => [
+                    'completion' => true,
+                    'success' => true,
+                    'score' => [
+                        'scaled' => 0.95
+                    ]
+                ],
+                'context' => [
+                    'contextActivities' => [
+                        'parent' => [
+                            ['id' => 'http://example.com/activities/parent-activity']
+                        ]
+                    ],
+                    'extensions' => [
+                        'http://example.com/extensions/session-id' => 'session-' . $i
+                    ]
+                ],
+                'timestamp' => now()->toIso8601String(),
+            ];
+        }
+
+        $response = $this->postJson('/api/statements/bulk', [
+            'statements' => $statements,
+        ], [
+            'Authorization' => $this->authToken,
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJsonCount(5, 'statements');
+
+        foreach ($statements as $statement) {
+            $this->assertDatabaseHas('statements', [
+                'timestamp' => $statement['timestamp'],
+            ]);
+        }
+    }
+
     /** @test */
     public function it_fails_to_create_a_statement_with_missing_actor()
     {
