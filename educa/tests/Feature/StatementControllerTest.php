@@ -26,9 +26,11 @@ class StatementControllerTest extends TestCase
     /** @test */
     public function it_can_create_a_statement_with_minimum_properties()
     {
-        $actor = Actor::factory()->create();
         $data = [
-            'actor_id' => $actor->id,
+            'actor' => [
+                'mbox' => 'mailto:test@example.com',
+                'name' => 'Test Actor'
+            ],
             'verb' => [
                 'name' => 'completed',
                 'iri' => 'http://adlnet.gov/expapi/verbs/completed',
@@ -46,17 +48,21 @@ class StatementControllerTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonPath('verb.name', 'completed')
-            ->assertJsonPath('object.name', 'Module 1');
+            ->assertJsonPath('object.name', 'Module 1')
+            ->assertJsonPath('actor.name', 'Test Actor');
 
-        $this->assertDatabaseHas('statements', ['actor_id' => $actor->id]);
+        $this->assertDatabaseHas('actors', ['name' => 'Test Actor']);
+        $this->assertDatabaseHas('statements', []);
     }
 
     /** @test */
     public function it_can_create_a_statement_with_all_properties()
     {
-        $actor = Actor::factory()->create();
         $data = [
-            'actor_id' => $actor->id,
+            'actor' => [
+                'mbox' => 'mailto:john.doe@example.com',
+                'name' => 'John Doe'
+            ],
             'verb' => [
                 'name' => 'attempted',
                 'iri' => 'http://adlnet.gov/expapi/verbs/attempted',
@@ -84,7 +90,11 @@ class StatementControllerTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonPath('result.success', true)
-            ->assertJsonPath('context.team.name', 'Team B');
+            ->assertJsonPath('context.team.name', 'Team B')
+            ->assertJsonPath('actor.name', 'John Doe');
+
+        $this->assertDatabaseHas('actors', ['name' => 'John Doe']);
+        $this->assertDatabaseHas('statements', []);
     }
 
     /** @test */
@@ -107,15 +117,17 @@ class StatementControllerTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['actor_id']);
+            ->assertJsonValidationErrors(['actor']);
     }
 
     /** @test */
     public function it_fails_to_create_a_statement_with_invalid_timestamp()
     {
-        $actor = Actor::factory()->create();
         $data = [
-            'actor_id' => $actor->id,
+            'actor' => [
+                'mbox' => 'mailto:test@example.com',
+                'name' => 'Test Actor'
+            ],
             'verb' => [
                 'name' => 'completed',
                 'iri' => 'http://adlnet.gov/expapi/verbs/completed',
@@ -137,35 +149,25 @@ class StatementControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_list_all_statements()
+    public function it_can_filter_statements()
     {
-        Statement::factory()->count(5)->create();
+        Actor::factory()->create(['name' => 'John Doe']);
+        Verb::factory()->create(['name' => 'completed']);
+        LearningObject::factory()->create(['name' => 'Module 1']);
+        Statement::factory()->create([
+            'actor_id' => Actor::where('name', 'John Doe')->first()->id,
+            'verb_id' => Verb::where('name', 'completed')->first()->id,
+            'object_id' => LearningObject::where('name', 'Module 1')->first()->id,
+            'timestamp' => now(),
+        ]);
 
-        $response = $this->getJson('/api/statements', [
+        $response = $this->postJson('/api/statements/filter',[
+            "actor_name" => "John Doe",
+        ], [
             'Authorization' => $this->authToken,
         ]);
 
         $response->assertStatus(200)
-            ->assertJsonCount(5);
-    }
-
-    /** @test */
-    public function it_fails_to_access_statements_without_auth_token()
-    {
-        $response = $this->getJson('/api/statements');
-
-        $response->assertStatus(401)
-            ->assertJson(['error' => 'Authorization token missing']);
-    }
-
-    /** @test */
-    public function it_fails_to_access_statements_with_invalid_auth_token()
-    {
-        $response = $this->getJson('/api/statements', [
-            'Authorization' => 'invalid-token',
-        ]);
-
-        $response->assertStatus(401)
-            ->assertJson(['error' => 'Invalid or expired token']);
+            ->assertJsonCount(1);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Actor;
 use App\Models\LearningObject;
 use App\Models\Statement;
 use App\Models\Verb;
@@ -12,7 +13,7 @@ class StatementController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'actor_id' => 'required|exists:actors,id',
+            'actor' => 'required|array',
             'verb' => 'required|array',
             'object' => 'required|array',
             'result' => 'nullable|array',
@@ -21,6 +22,12 @@ class StatementController extends Controller
         ]);
 
         $timestamp = isset($validated['timestamp']) ? date('Y-m-d H:i:s', strtotime($validated['timestamp'])) : now();
+
+        // Create or retrieve actor
+        $actor = Actor::firstOrCreate([
+            'mbox' => $validated['actor']['mbox'] ?? null,
+            'name' => $validated['actor']['name'] ?? null,
+        ]);
 
         // Create or retrieve verb
         $verb = Verb::firstOrCreate([
@@ -37,7 +44,7 @@ class StatementController extends Controller
 
         // Create statement
         $statement = Statement::create([
-            'actor_id' => $validated['actor_id'],
+            'actor_id' => $actor->id,
             'verb_id' => $verb->id,
             'object_id' => $object->id,
             'result' => $validated['result'] ?? null,
@@ -51,5 +58,37 @@ class StatementController extends Controller
     public function index()
     {
         return response()->json(Statement::with(['actor', 'verb', 'object'])->get());
+    }
+
+    public function filter(Request $request)
+    {
+        $query = Statement::query()->with(['actor', 'verb', 'object']);
+
+        if ($request->has('actor_name')) {
+            $query->whereHas('actor', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->input('actor_name') . '%');
+            });
+        }
+
+        if ($request->has('verb_name')) {
+            $query->whereHas('verb', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->input('verb_name') . '%');
+            });
+        }
+
+        if ($request->has('object_name')) {
+            $query->whereHas('object', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->input('object_name') . '%');
+            });
+        }
+
+        if ($request->has('from_date') && $request->has('to_date')) {
+            $query->whereBetween('timestamp', [
+                $request->input('from_date'),
+                $request->input('to_date')
+            ]);
+        }
+
+        return response()->json($query->get());
     }
 }

@@ -60,4 +60,5 @@ Route::prefix("api")->middleware(['xapi'])->group(function () {
     // Statements
     Route::get('/statements', [StatementController::class, 'index']);
     Route::post('/statements', [StatementController::class, 'store']);
+    Route::post('/statements/filter', [StatementController::class, 'filter']);
 });
