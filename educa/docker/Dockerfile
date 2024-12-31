@@ -24,7 +24,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy application code
 COPY --chown=www-data:www-data ./educa /usr/share/nginx/html
 
-RUN cd /usr/share/nginx/html && yarn install --immutable --immutable-cache --check-cache && yarn build && composer install && yarn cache clean
+RUN cd /usr/share/nginx/html && yarn install --immutable --immutable-cache --check-cache && yarn build && composer install && yarn cache clean && php artisan l5-swagger:generate
 
 # Supercronic for Cronjobs
 # Latest releases available at https://github.com/aptible/supercronic/releases

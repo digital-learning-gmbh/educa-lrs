@@ -10,4 +10,13 @@ class Verb extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'iri'];
+
+    public function toXapiFormat()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'iri' => $this->iri,
+        ];
+    }
 }

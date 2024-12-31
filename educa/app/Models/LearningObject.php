@@ -11,4 +11,18 @@ class LearningObject extends Model
 
     use HasFactory;
     protected $fillable = ['name', 'type', 'iri'];
+
+    public function toXapiFormat()
+    {
+        return [
+            'id' => $this->id,
+            'definition' => [
+                'name' => [
+                    'en-US' => $this->name,
+                ],
+                'type' => $this->type,
+                'iri' => $this->iri,
+            ],
+        ];
+    }
 }

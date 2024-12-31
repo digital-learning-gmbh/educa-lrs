@@ -18,12 +18,12 @@ test:
   stage: test
   image: php:8.2-cli
   before_script:
-    - composer install --working-dir=educa
-    - cp educa/.env.example educa/.env
     - cd educa
+    - apt-get update && apt-get install -y sqlite3 libsqlite3-dev unzip curl
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install
+    - cp ./.env.example ./.env
     - php artisan key:generate --ansi
-    - mkdir -p educa/database
-    - touch educa/database/database.sqlite
+    - touch database/database.sqlite
   script:
-    - cd educa
     - php artisan test

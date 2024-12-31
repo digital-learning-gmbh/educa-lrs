@@ -4,36 +4,10 @@ use App\Http\Controllers\ActorController;
 use App\Http\Controllers\ObjectController;
 use App\Http\Controllers\StatementController;
 use App\Http\Controllers\VerbController;
-use App\Models\Actor;
-use App\Models\LearningObject;
-use App\Models\Statement;
-use App\Models\Verb;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    // detect, if migrated, otherwise redirect to install
-    if (!\Schema::hasTable('migrations')) {
-        return redirect('/install');
-    }
-    $stats = [
-        'actors' => Actor::count(),
-        'verbs' => Verb::count(),
-        'objects' => LearningObject::count(),
-        'statements' => Statement::count(),
-    ];
-
-    // Pass statistics to the welcome view
-    return view('welcome', compact('stats'));
-});
-
-Route::get('/install', function () {
-    // Execute the migrations
-    Artisan::call('migrate', ['--force' => true]);
-
-    return view('install_finished');
-});
-
+Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'landingPage']);
+Route::get('/install', [\App\Http\Controllers\WelcomeController::class, 'install']);
 
 Route::prefix("api")->middleware(['xapi'])->group(function () {
 

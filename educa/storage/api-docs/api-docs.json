@@ -1,0 +1,1494 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Educa LRS REST API Backend",
+        "description": "Educa LRS API Backend",
+        "contact": {
+            "email": "support@digitallearning.gmbh"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/actors": {
+            "get": {
+                "tags": [
+                    "Actors"
+                ],
+                "summary": "List all actors",
+                "operationId": "a5f35eaaee011abf3ddc6d8db52f7125",
+                "responses": {
+                    "200": {
+                        "description": "List of actors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "John Doe"
+                                            },
+                                            "mbox": {
+                                                "type": "string",
+                                                "example": "mailto:john.doe@example.com"
+                                            },
+                                            "account_homepage": {
+                                                "type": "string",
+                                                "example": "http://example.com"
+                                            },
+                                            "account_name": {
+                                                "type": "string",
+                                                "example": "johndoe"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Actors"
+                ],
+                "summary": "Create a new actor",
+                "operationId": "1fa2d7dc5ea77254071e874854ce7638",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "mbox"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "mbox": {
+                                        "type": "string",
+                                        "example": "mailto:john.doe@example.com"
+                                    },
+                                    "account_homepage": {
+                                        "type": "string",
+                                        "example": "http://example.com"
+                                    },
+                                    "account_name": {
+                                        "type": "string",
+                                        "example": "johndoe"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Actor created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "mbox": {
+                                            "type": "string",
+                                            "example": "mailto:john.doe@example.com"
+                                        },
+                                        "account_homepage": {
+                                            "type": "string",
+                                            "example": "http://example.com"
+                                        },
+                                        "account_name": {
+                                            "type": "string",
+                                            "example": "johndoe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/actors/{id}": {
+            "get": {
+                "tags": [
+                    "Actors"
+                ],
+                "summary": "Retrieve an actor by ID",
+                "operationId": "1b538da5e4c57d7e61d6dea6e271ac35",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the actor to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Actor retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "mbox": {
+                                            "type": "string",
+                                            "example": "mailto:john.doe@example.com"
+                                        },
+                                        "account_homepage": {
+                                            "type": "string",
+                                            "example": "http://example.com"
+                                        },
+                                        "account_name": {
+                                            "type": "string",
+                                            "example": "johndoe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Actors"
+                ],
+                "summary": "Update actor details",
+                "operationId": "64d8d68e06afdc9ee910c6a3a27891f5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the actor to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Updated"
+                                    },
+                                    "mbox": {
+                                        "type": "string",
+                                        "example": "mailto:updated.john@example.com"
+                                    },
+                                    "account_homepage": {
+                                        "type": "string",
+                                        "example": "http://updated.example.com"
+                                    },
+                                    "account_name": {
+                                        "type": "string",
+                                        "example": "updatedjohn"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Actor updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "John Updated"
+                                        },
+                                        "mbox": {
+                                            "type": "string",
+                                            "example": "mailto:updated.john@example.com"
+                                        },
+                                        "account_homepage": {
+                                            "type": "string",
+                                            "example": "http://updated.example.com"
+                                        },
+                                        "account_name": {
+                                            "type": "string",
+                                            "example": "updatedjohn"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Actors"
+                ],
+                "summary": "Delete an actor",
+                "operationId": "5652d042a89f7196e181384312d18ad8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the actor to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Actor deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Actor deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/objects": {
+            "get": {
+                "tags": [
+                    "Objects"
+                ],
+                "summary": "List all objects",
+                "operationId": "d7a2d9291e5f8b61329bb8a474a89920",
+                "responses": {
+                    "200": {
+                        "description": "List of objects",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "definition": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Module 1"
+                                                    },
+                                                    "type": {
+                                                        "type": "string",
+                                                        "example": "module"
+                                                    },
+                                                    "iri": {
+                                                        "type": "string",
+                                                        "example": "http://example.com/modules/1"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Objects"
+                ],
+                "summary": "Create a new object",
+                "operationId": "1cde3c97246d6bb8dd55334720b9a7e9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "type",
+                                    "iri"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Module 1"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "module"
+                                    },
+                                    "iri": {
+                                        "type": "string",
+                                        "example": "http://example.com/modules/1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Object created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "definition": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Module 1"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "module"
+                                                },
+                                                "iri": {
+                                                    "type": "string",
+                                                    "example": "http://example.com/modules/1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{id}": {
+            "get": {
+                "tags": [
+                    "Objects"
+                ],
+                "summary": "Retrieve an object by ID",
+                "operationId": "00769e257b8ac6644390da518e85c420",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the object to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Object retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "definition": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Module 1"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "module"
+                                                },
+                                                "iri": {
+                                                    "type": "string",
+                                                    "example": "http://example.com/modules/1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Objects"
+                ],
+                "summary": "Update an object",
+                "operationId": "3b03ef8c1b993e9951d9c40022443da3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the object to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated Module"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "updated-module"
+                                    },
+                                    "iri": {
+                                        "type": "string",
+                                        "example": "http://example.com/modules/updated"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Object updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "definition": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Updated Module"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "updated-module"
+                                                },
+                                                "iri": {
+                                                    "type": "string",
+                                                    "example": "http://example.com/modules/updated"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Objects"
+                ],
+                "summary": "Delete an object",
+                "operationId": "9edaeea5b896c536e48582c95b8af81a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the object to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Object deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Object deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/statements": {
+            "get": {
+                "tags": [
+                    "Statements"
+                ],
+                "summary": "Retrieve all statements",
+                "operationId": "30ddb849c415c0dbff2992bea8fc9f37",
+                "responses": {
+                    "200": {
+                        "description": "List of statements",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "actor": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "mbox": {
+                                                        "type": "string",
+                                                        "example": "mailto:john.doe@example.com"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "verb": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "http://adlnet.gov/expapi/verbs/completed"
+                                                    },
+                                                    "display": {
+                                                        "properties": {
+                                                            "en-US": {
+                                                                "type": "string",
+                                                                "example": "completed"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "object": {
+                                                "properties": {
+                                                    "objectType": {
+                                                        "type": "string",
+                                                        "example": "Activity"
+                                                    },
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "http://example.com/activities/module-1"
+                                                    },
+                                                    "definition": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "properties": {
+                                                                    "en-US": {
+                                                                        "type": "string",
+                                                                        "example": "Module 1"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "description": {
+                                                                "properties": {
+                                                                    "en-US": {
+                                                                        "type": "string",
+                                                                        "example": "A module description"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Statements"
+                ],
+                "summary": "Store a new statement",
+                "operationId": "58a0a2104bf52183951ce4fe08e85778",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "actor",
+                                    "verb",
+                                    "object"
+                                ],
+                                "properties": {
+                                    "actor": {
+                                        "properties": {
+                                            "objectType": {
+                                                "type": "string",
+                                                "example": "Agent"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "John Doe"
+                                            },
+                                            "mbox": {
+                                                "type": "string",
+                                                "example": "mailto:john.doe@example.com"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "verb": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "example": "http://adlnet.gov/expapi/verbs/completed"
+                                            },
+                                            "display": {
+                                                "properties": {
+                                                    "en-US": {
+                                                        "type": "string",
+                                                        "example": "completed"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "object": {
+                                        "properties": {
+                                            "objectType": {
+                                                "type": "string",
+                                                "example": "Activity"
+                                            },
+                                            "id": {
+                                                "type": "string",
+                                                "example": "http://example.com/activities/module-1"
+                                            },
+                                            "definition": {
+                                                "properties": {
+                                                    "name": {
+                                                        "properties": {
+                                                            "en-US": {
+                                                                "type": "string",
+                                                                "example": "Module 1"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "description": {
+                                                        "properties": {
+                                                            "en-US": {
+                                                                "type": "string",
+                                                                "example": "A module description"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Statement stored successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "actor": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "mbox": {
+                                                    "type": "string",
+                                                    "example": "mailto:john.doe@example.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "verb": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "http://adlnet.gov/expapi/verbs/completed"
+                                                },
+                                                "display": {
+                                                    "properties": {
+                                                        "en-US": {
+                                                            "type": "string",
+                                                            "example": "completed"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "object": {
+                                            "properties": {
+                                                "objectType": {
+                                                    "type": "string",
+                                                    "example": "Activity"
+                                                },
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "http://example.com/activities/module-1"
+                                                },
+                                                "definition": {
+                                                    "properties": {
+                                                        "name": {
+                                                            "properties": {
+                                                                "en-US": {
+                                                                    "type": "string",
+                                                                    "example": "Module 1"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "description": {
+                                                            "properties": {
+                                                                "en-US": {
+                                                                    "type": "string",
+                                                                    "example": "A module description"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/statements/bulk": {
+            "post": {
+                "tags": [
+                    "Statements"
+                ],
+                "summary": "Store multiple statements in bulk",
+                "operationId": "26e33d60606aac821c89327ff0a08e79",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "statements"
+                                ],
+                                "properties": {
+                                    "statements": {
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "actor",
+                                                "verb",
+                                                "object"
+                                            ],
+                                            "properties": {
+                                                "actor": {
+                                                    "properties": {
+                                                        "objectType": {
+                                                            "type": "string",
+                                                            "example": "Agent"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        },
+                                                        "mbox": {
+                                                            "type": "string",
+                                                            "example": "mailto:john.doe@example.com"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "verb": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string",
+                                                            "example": "http://adlnet.gov/expapi/verbs/completed"
+                                                        },
+                                                        "display": {
+                                                            "properties": {
+                                                                "en-US": {
+                                                                    "type": "string",
+                                                                    "example": "completed"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "object": {
+                                                    "properties": {
+                                                        "objectType": {
+                                                            "type": "string",
+                                                            "example": "Activity"
+                                                        },
+                                                        "id": {
+                                                            "type": "string",
+                                                            "example": "http://example.com/activities/module-1"
+                                                        },
+                                                        "definition": {
+                                                            "properties": {
+                                                                "name": {
+                                                                    "properties": {
+                                                                        "en-US": {
+                                                                            "type": "string",
+                                                                            "example": "Module 1"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "description": {
+                                                                    "properties": {
+                                                                        "en-US": {
+                                                                            "type": "string",
+                                                                            "example": "A module description"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "result": {
+                                                    "properties": {
+                                                        "completion": {
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        },
+                                                        "success": {
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        },
+                                                        "score": {
+                                                            "properties": {
+                                                                "scaled": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "example": 0.95
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "context": {
+                                                    "properties": {
+                                                        "contextActivities": {
+                                                            "properties": {
+                                                                "parent": {
+                                                                    "type": "array",
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "id": {
+                                                                                "type": "string",
+                                                                                "example": "http://example.com/activities/parent-activity"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "timestamp": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-12-30T12:34:56Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Statements stored successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "statements": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "actor": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "John Doe"
+                                                            },
+                                                            "mbox": {
+                                                                "type": "string",
+                                                                "example": "mailto:john.doe@example.com"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "verb": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "string",
+                                                                "example": "http://adlnet.gov/expapi/verbs/completed"
+                                                            },
+                                                            "display": {
+                                                                "properties": {
+                                                                    "en-US": {
+                                                                        "type": "string",
+                                                                        "example": "completed"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "object": {
+                                                        "properties": {
+                                                            "objectType": {
+                                                                "type": "string",
+                                                                "example": "Activity"
+                                                            },
+                                                            "id": {
+                                                                "type": "string",
+                                                                "example": "http://example.com/activities/module-1"
+                                                            },
+                                                            "definition": {
+                                                                "properties": {
+                                                                    "name": {
+                                                                        "properties": {
+                                                                            "en-US": {
+                                                                                "type": "string",
+                                                                                "example": "Module 1"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "description": {
+                                                                        "properties": {
+                                                                            "en-US": {
+                                                                                "type": "string",
+                                                                                "example": "A module description"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/statements/filter": {
+            "get": {
+                "tags": [
+                    "Statements"
+                ],
+                "summary": "Filter statements based on criteria",
+                "operationId": "2ca638d5e3976166fb8f896fb956473d",
+                "parameters": [
+                    {
+                        "name": "actor_name",
+                        "in": "query",
+                        "description": "Filter statements by actor name",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "John Doe"
+                        }
+                    },
+                    {
+                        "name": "verb_name",
+                        "in": "query",
+                        "description": "Filter statements by verb name",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "completed"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filtered list of statements",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "actor": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "mbox": {
+                                                        "type": "string",
+                                                        "example": "mailto:john.doe@example.com"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "verb": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "http://adlnet.gov/expapi/verbs/completed"
+                                                    },
+                                                    "display": {
+                                                        "properties": {
+                                                            "en-US": {
+                                                                "type": "string",
+                                                                "example": "completed"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "object": {
+                                                "properties": {
+                                                    "objectType": {
+                                                        "type": "string",
+                                                        "example": "Activity"
+                                                    },
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "http://example.com/activities/module-1"
+                                                    },
+                                                    "definition": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "properties": {
+                                                                    "en-US": {
+                                                                        "type": "string",
+                                                                        "example": "Module 1"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "description": {
+                                                                "properties": {
+                                                                    "en-US": {
+                                                                        "type": "string",
+                                                                        "example": "A module description"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/verbs": {
+            "get": {
+                "tags": [
+                    "Verbs"
+                ],
+                "summary": "List all verbs",
+                "operationId": "614da538305061d76a85db8434cf25f6",
+                "responses": {
+                    "200": {
+                        "description": "List of verbs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "completed"
+                                            },
+                                            "iri": {
+                                                "type": "string",
+                                                "example": "http://adlnet.gov/expapi/verbs/completed"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Verbs"
+                ],
+                "summary": "Create a new verb",
+                "operationId": "389d491f88bb36478be597d9a5c66e73",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "iri"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "completed"
+                                    },
+                                    "iri": {
+                                        "type": "string",
+                                        "example": "http://adlnet.gov/expapi/verbs/completed"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Verb created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "completed"
+                                        },
+                                        "iri": {
+                                            "type": "string",
+                                            "example": "http://adlnet.gov/expapi/verbs/completed"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/verbs/{id}": {
+            "get": {
+                "tags": [
+                    "Verbs"
+                ],
+                "summary": "Retrieve a verb by ID",
+                "operationId": "47d4088069b5def5b74d1d0ebdb95f43",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the verb to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Verb retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "completed"
+                                        },
+                                        "iri": {
+                                            "type": "string",
+                                            "example": "http://adlnet.gov/expapi/verbs/completed"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Verbs"
+                ],
+                "summary": "Update a verb",
+                "operationId": "cb1d3154db673f6b41e67a25e0d8d1b4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the verb to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "updated-completed"
+                                    },
+                                    "iri": {
+                                        "type": "string",
+                                        "example": "http://adlnet.gov/expapi/verbs/updated-completed"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Verb updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "updated-completed"
+                                        },
+                                        "iri": {
+                                            "type": "string",
+                                            "example": "http://adlnet.gov/expapi/verbs/updated-completed"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Verbs"
+                ],
+                "summary": "Delete a verb",
+                "operationId": "47b91c8fed88df533432a82d4468d90a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the verb to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Verb deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Verb deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Actors",
+            "description": "API Endpoints for managing Actors"
+        },
+        {
+            "name": "Objects",
+            "description": "API Endpoints for managing Objects"
+        },
+        {
+            "name": "Statements",
+            "description": "API Endpoints for managing Statements"
+        },
+        {
+            "name": "Verbs",
+            "description": "API Endpoints for managing Verbs"
+        }
+    ]
+}

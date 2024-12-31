@@ -9,8 +9,79 @@ use App\Models\Verb;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @OA\Tag(
+ *      name="Statements",
+ *      description="API Endpoints for managing Statements"
+ *  )
+ */
 class StatementController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/statements",
+     *     summary="Store a new statement",
+     *     tags={"Statements"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"actor", "verb", "object"},
+     *             @OA\Property(property="actor", type="object",
+     *                 @OA\Property(property="objectType", type="string", example="Agent"),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="mbox", type="string", example="mailto:john.doe@example.com")
+     *             ),
+     *             @OA\Property(property="verb", type="object",
+     *                 @OA\Property(property="id", type="string", example="http://adlnet.gov/expapi/verbs/completed"),
+     *                 @OA\Property(property="display", type="object",
+     *                     @OA\Property(property="en-US", type="string", example="completed")
+     *                 )
+     *             ),
+     *             @OA\Property(property="object", type="object",
+     *                 @OA\Property(property="objectType", type="string", example="Activity"),
+     *                 @OA\Property(property="id", type="string", example="http://example.com/activities/module-1"),
+     *                 @OA\Property(property="definition", type="object",
+     *                     @OA\Property(property="name", type="object",
+     *                         @OA\Property(property="en-US", type="string", example="Module 1")
+     *                     ),
+     *                     @OA\Property(property="description", type="object",
+     *                         @OA\Property(property="en-US", type="string", example="A module description")
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Statement stored successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="actor", type="object",
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="mbox", type="string", example="mailto:john.doe@example.com")
+     *             ),
+     *             @OA\Property(property="verb", type="object",
+     *                 @OA\Property(property="id", type="string", example="http://adlnet.gov/expapi/verbs/completed"),
+     *                 @OA\Property(property="display", type="object",
+     *                     @OA\Property(property="en-US", type="string", example="completed")
+     *                 )
+     *             ),
+     *             @OA\Property(property="object", type="object",
+     *                 @OA\Property(property="objectType", type="string", example="Activity"),
+     *                 @OA\Property(property="id", type="string", example="http://example.com/activities/module-1"),
+     *                 @OA\Property(property="definition", type="object",
+     *                     @OA\Property(property="name", type="object",
+     *                         @OA\Property(property="en-US", type="string", example="Module 1")
+     *                     ),
+     *                     @OA\Property(property="description", type="object",
+     *                         @OA\Property(property="en-US", type="string", example="A module description")
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -61,6 +132,99 @@ class StatementController extends Controller
         return response()->json($statement->toXapiFormat(), 201);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/statements/bulk",
+     *     summary="Store multiple statements in bulk",
+     *     tags={"Statements"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"statements"},
+     *             @OA\Property(property="statements", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     required={"actor", "verb", "object"},
+     *                     @OA\Property(property="actor", type="object",
+     *                         @OA\Property(property="objectType", type="string", example="Agent"),
+     *                         @OA\Property(property="name", type="string", example="John Doe"),
+     *                         @OA\Property(property="mbox", type="string", example="mailto:john.doe@example.com")
+     *                     ),
+     *                     @OA\Property(property="verb", type="object",
+     *                         @OA\Property(property="id", type="string", example="http://adlnet.gov/expapi/verbs/completed"),
+     *                         @OA\Property(property="display", type="object",
+     *                             @OA\Property(property="en-US", type="string", example="completed")
+     *                         )
+     *                     ),
+     *                     @OA\Property(property="object", type="object",
+     *                         @OA\Property(property="objectType", type="string", example="Activity"),
+     *                         @OA\Property(property="id", type="string", example="http://example.com/activities/module-1"),
+     *                         @OA\Property(property="definition", type="object",
+     *                             @OA\Property(property="name", type="object",
+     *                                 @OA\Property(property="en-US", type="string", example="Module 1")
+     *                             ),
+     *                             @OA\Property(property="description", type="object",
+     *                                 @OA\Property(property="en-US", type="string", example="A module description")
+     *                             )
+     *                         )
+     *                     ),
+     *                     @OA\Property(property="result", type="object",
+     *                         @OA\Property(property="completion", type="boolean", example=true),
+     *                         @OA\Property(property="success", type="boolean", example=true),
+     *                         @OA\Property(property="score", type="object",
+     *                             @OA\Property(property="scaled", type="number", format="float", example=0.95)
+     *                         )
+     *                     ),
+     *                     @OA\Property(property="context", type="object",
+     *                         @OA\Property(property="contextActivities", type="object",
+     *                             @OA\Property(property="parent", type="array",
+     *                                 @OA\Items(type="object",
+     *                                     @OA\Property(property="id", type="string", example="http://example.com/activities/parent-activity")
+     *                                 )
+     *                             )
+     *                         )
+     *                     ),
+     *                     @OA\Property(property="timestamp", type="string", format="date-time", example="2024-12-30T12:34:56Z")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Statements stored successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="statements", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="actor", type="object",
+     *                         @OA\Property(property="name", type="string", example="John Doe"),
+     *                         @OA\Property(property="mbox", type="string", example="mailto:john.doe@example.com")
+     *                     ),
+     *                     @OA\Property(property="verb", type="object",
+     *                         @OA\Property(property="id", type="string", example="http://adlnet.gov/expapi/verbs/completed"),
+     *                         @OA\Property(property="display", type="object",
+     *                             @OA\Property(property="en-US", type="string", example="completed")
+     *                         )
+     *                     ),
+     *                     @OA\Property(property="object", type="object",
+     *                         @OA\Property(property="objectType", type="string", example="Activity"),
+     *                         @OA\Property(property="id", type="string", example="http://example.com/activities/module-1"),
+     *                         @OA\Property(property="definition", type="object",
+     *                             @OA\Property(property="name", type="object",
+     *                                 @OA\Property(property="en-US", type="string", example="Module 1")
+     *                             ),
+     *                             @OA\Property(property="description", type="object",
+     *                                 @OA\Property(property="en-US", type="string", example="A module description")
+     *                             )
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function bulkStore(Request $request)
     {
         $validated = $request->validate([
@@ -120,11 +284,105 @@ class StatementController extends Controller
         return response()->json(['statements' => $createdStatements], 201);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/statements",
+     *     summary="Retrieve all statements",
+     *     tags={"Statements"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of statements",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="actor", type="object",
+     *                     @OA\Property(property="name", type="string", example="John Doe"),
+     *                     @OA\Property(property="mbox", type="string", example="mailto:john.doe@example.com")
+     *                 ),
+     *                 @OA\Property(property="verb", type="object",
+     *                     @OA\Property(property="id", type="string", example="http://adlnet.gov/expapi/verbs/completed"),
+     *                     @OA\Property(property="display", type="object",
+     *                         @OA\Property(property="en-US", type="string", example="completed")
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="object", type="object",
+     *                     @OA\Property(property="objectType", type="string", example="Activity"),
+     *                     @OA\Property(property="id", type="string", example="http://example.com/activities/module-1"),
+     *                     @OA\Property(property="definition", type="object",
+     *                         @OA\Property(property="name", type="object",
+     *                             @OA\Property(property="en-US", type="string", example="Module 1")
+     *                         ),
+     *                         @OA\Property(property="description", type="object",
+     *                             @OA\Property(property="en-US", type="string", example="A module description")
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function index()
     {
         return response()->json(Statement::with(['actor', 'verb', 'object'])->get());
     }
 
+    /**
+     * @OA\Get(
+     *     path="/statements/filter",
+     *     summary="Filter statements based on criteria",
+     *     tags={"Statements"},
+     *     @OA\Parameter(
+     *         name="actor_name",
+     *         in="query",
+     *         description="Filter statements by actor name",
+     *         required=false,
+     *         @OA\Schema(type="string", example="John Doe")
+     *     ),
+     *     @OA\Parameter(
+     *         name="verb_name",
+     *         in="query",
+     *         description="Filter statements by verb name",
+     *         required=false,
+     *         @OA\Schema(type="string", example="completed")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Filtered list of statements",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="actor", type="object",
+     *                     @OA\Property(property="name", type="string", example="John Doe"),
+     *                     @OA\Property(property="mbox", type="string", example="mailto:john.doe@example.com")
+     *                 ),
+     *                 @OA\Property(property="verb", type="object",
+     *                     @OA\Property(property="id", type="string", example="http://adlnet.gov/expapi/verbs/completed"),
+     *                     @OA\Property(property="display", type="object",
+     *                         @OA\Property(property="en-US", type="string", example="completed")
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="object", type="object",
+     *                     @OA\Property(property="objectType", type="string", example="Activity"),
+     *                     @OA\Property(property="id", type="string", example="http://example.com/activities/module-1"),
+     *                     @OA\Property(property="definition", type="object",
+     *                         @OA\Property(property="name", type="object",
+     *                             @OA\Property(property="en-US", type="string", example="Module 1")
+     *                         ),
+     *                         @OA\Property(property="description", type="object",
+     *                             @OA\Property(property="en-US", type="string", example="A module description")
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function filter(Request $request)
     {
         $query = Statement::query()->with(['actor', 'verb', 'object']);
