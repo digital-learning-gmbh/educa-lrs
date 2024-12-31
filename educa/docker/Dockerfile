@@ -4,7 +4,7 @@ FROM php:8.2-fpm
 RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free" > /etc/apt/sources.list.d/contrib.list \
     && apt-get update && apt-get install -y \
     sudo nginx libxml2-dev zlib1g-dev libpng-dev libldb-dev libldap2-dev libsodium-dev libzip-dev git ttf-mscorefonts-installer \
-    freetype* libpng-dev libjpeg-dev libfreetype6-dev libwebp-dev imagemagick curl libreoffice \
+    freetype* libpng-dev libjpeg-dev libfreetype6-dev libwebp-dev imagemagick curl libreoffice mariadb-server  \
     && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install gd pdo pdo_mysql opcache exif sockets pcntl bcmath ldap sodium xml zip \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
