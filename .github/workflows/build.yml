@@ -64,12 +64,12 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd /educa
+          cd educa
           composer install
 
       - name: Run Laravel Tests
         run: |
-          cd /educa
+          cd educa
           php artisan test
 
 # Additional jobs (SAST, Code Quality) can be added here if needed.
