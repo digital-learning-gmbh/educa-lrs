@@ -1,6 +1,5 @@
 #!/bin/sh
 service nginx start
-service mysql start
 php-fpm -D
 
 # Test crontab

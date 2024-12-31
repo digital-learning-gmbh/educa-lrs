@@ -1,6 +1,19 @@
 version: '3'
 services:
 
+  db:
+    image: mariadb:10.6
+    command: [ '--innodb_strict_mode=0' ]
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+      - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MARIADB_USER=${DATABASE_USER}
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+      - MARIADB_DATABASE=${DATABASE_USER}
+    volumes:
+      - './db:/var/lib/mysql'
+
   educa:
       image: registry.digitallearning.gmbh/educa/educa-lrs/main:latest
       restart: unless-stopped
@@ -11,7 +24,8 @@ services:
       volumes:
         - ./storage/logs:/usr/share/nginx/html/storage/logs
         - ./storage/app:/usr/share/nginx/html/storage/app
-        - ./db:/var/lib/mysql
         - ./.env_educa:/usr/share/nginx/html/.env
+      depends_on:
+        - db
 
 
