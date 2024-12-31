@@ -13,3 +13,17 @@ include:
 variables: &global-variables
   GIT_DEPTH: 1
   DOCKERFILE_PATH: educa/docker/Dockerfile
+
+test:
+  stage: test
+  image: shivammathur/php:8.2
+  services:
+    - name: sqlite
+  before_script:
+    - composer install --working-dir=educa
+    - cp educa/.env.example educa/.env
+    - php artisan key:generate --ansi --working-dir=educa
+    - mkdir -p educa/database
+    - touch educa/database/database.sqlite
+  script:
+    - php artisan test --working-dir=educa
