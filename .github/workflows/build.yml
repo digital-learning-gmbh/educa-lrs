@@ -1,0 +1,76 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: ${{ env.GIT_DEPTH }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Image
+        run: |
+          docker build -f ${{ env.DOCKERFILE_PATH }} .
+    env:
+      GIT_DEPTH: 1
+      DOCKERFILE_PATH: educa/docker/Dockerfile
+
+  container-scanning:
+    name: Container Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Container Scanning (Example Tool)
+        run: |
+          echo "Run your container scanning tool here"
+
+  secret-detection:
+    name: Secret Detection
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Secret Detection (Example Tool)
+        run: |
+          echo "Run your secret detection tool here"
+
+  laravel-test:
+    name: Laravel Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install Dependencies
+        run: |
+          cd /educa
+          composer install
+
+      - name: Run Laravel Tests
+        run: |
+          cd /educa
+          php artisan test
+
+# Additional jobs (SAST, Code Quality) can be added here if needed.
+# Uncomment or add those steps to match the original GitLab CI/CD workflow.
