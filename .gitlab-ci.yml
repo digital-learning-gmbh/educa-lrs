@@ -16,12 +16,14 @@ variables: &global-variables
 
 test:
   stage: test
-  image: shivammathur/php:8.2
+  image: php:8.2-cli
   before_script:
     - composer install --working-dir=educa
     - cp educa/.env.example educa/.env
-    - php artisan key:generate --ansi --working-dir=educa
+    - cd educa
+    - php artisan key:generate --ansi
     - mkdir -p educa/database
     - touch educa/database/database.sqlite
   script:
-    - php artisan test --working-dir=educa
+    - cd educa
+    - php artisan test
