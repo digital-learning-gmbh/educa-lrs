@@ -37,9 +37,12 @@ class ObjectControllerTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJson([
-                'name' => $data['name'],
-                'type' => $data['type'],
-                'iri' => $data['iri'],
+                'id' => $response['id'],
+                'definition' => [
+                    'name' => ['en-US' => $data['name']],
+                    'type' => $data['type'],
+                    'iri' => $data['iri'],
+                ],
             ]);
 
         $this->assertDatabaseHas('learning_objects', $data);
@@ -56,6 +59,17 @@ class ObjectControllerTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonCount(3);
+
+        foreach (LearningObject::all() as $object) {
+            $response->assertJsonFragment([
+                'id' => $object->id,
+                'definition' => [
+                    'name' => ['en-US' => $object->name],
+                    'type' => $object->type,
+                    'iri' => $object->iri,
+                ],
+            ]);
+        }
     }
 
     /** @test */
@@ -70,9 +84,11 @@ class ObjectControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'id' => $object->id,
-                'name' => $object->name,
-                'type' => $object->type,
-                'iri' => $object->iri,
+                'definition' => [
+                    'name' => ['en-US' => $object->name],
+                    'type' => $object->type,
+                    'iri' => $object->iri,
+                ],
             ]);
     }
 
@@ -94,9 +110,11 @@ class ObjectControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'id' => $object->id,
-                'name' => $updateData['name'],
-                'type' => $updateData['type'],
-                'iri' => $updateData['iri'],
+                'definition' => [
+                    'name' => ['en-US' => $updateData['name']],
+                    'type' => $updateData['type'],
+                    'iri' => $updateData['iri'],
+                ],
             ]);
 
         $this->assertDatabaseHas('learning_objects', $updateData);
