@@ -17,8 +17,6 @@ variables: &global-variables
 test:
   stage: test
   image: shivammathur/php:8.2
-  services:
-    - name: sqlite
   before_script:
     - composer install --working-dir=educa
     - cp educa/.env.example educa/.env

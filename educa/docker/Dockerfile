@@ -58,6 +58,27 @@ RUN echo "pm = dynamic" >> /usr/local/etc/php-fpm.d/www.conf && \
 # NGINX
 COPY ./educa/docker/nginx/site.conf /etc/nginx/sites-enabled/default
 
+# MariaDB Setup
+RUN mkdir -p /var/run/mysqld && chown -R mysql:mysql /var/run/mysqld \
+    && mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
+
+RUN echo "[mysqld]" > /etc/mysql/my.cnf \
+    && echo "skip-networking=0" >> /etc/mysql/my.cnf \
+    && echo "skip-bind-address" >> /etc/mysql/my.cnf \
+    && echo "innodb_strict_mode=0" >> /etc/mysql/my.cnf \
+    && echo "user=mysql" >> /etc/mysql/my.cnf \
+    && echo "pid-file=/var/run/mysqld/mysqld.pid" >> /etc/mysql/my.cnf \
+    && echo "datadir=/var/lib/mysql" >> /etc/mysql/my.cnf \
+    && echo "socket=/var/run/mysqld/mysqld.sock" >> /etc/mysql/my.cnf \
+    && echo "[client]" >> /etc/mysql/my.cnf \
+    && echo "user=root" >> /etc/mysql/my.cnf \
+    && echo "password=" >> /etc/mysql/my.cnf
+
+RUN mysqld --initialize-insecure --datadir=/var/lib/mysql --user=mysql
+
+# Create educa-lrs database
+RUN service mysql start && mysql -e "CREATE DATABASE IF NOT EXISTS \`educa-lrs\`;"
+
 WORKDIR /usr/share/nginx/html
 
 EXPOSE 80
